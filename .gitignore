@@ -1,3 +1,20 @@
+# My gitignore
+app/venv/
+env/
+__pycache__
+*.ipynb
+*.vscode
+*.idea
+data
+app/data/*
+.DS_Store
+node_modules/
+**js/
+db-data/
+static/
+nginx/*
+!nginx/server.conf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
