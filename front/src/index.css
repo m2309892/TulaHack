@@ -1,0 +1,32 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+:root {
+    --background-color: #ffffff; /* Цвет фона */
+    --text-color: #000000; /* Цвет текста */
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.dark-theme {
+    --background-color: #222222; /* Темный цвет фона */
+    --text-color: #ffffff; /* Белый цвет текста */
+}
+
+/* Дополнительные стили для темной темы */
+.dark-theme .navbar {
+    background-color: #333333; /* Цвет фона навбара в темной теме */
+}
+
+/* Дополнительные стили для темной темы */
+.light-theme .navbar {
+    background-color: #f4f4f4; /* Цвет фона навбара в светлой теме */
+}
+
+

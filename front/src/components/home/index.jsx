@@ -1,17 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import homeImage from '../../assets/home-image.jpg';
+import homeImage from '../../assets/home-image.png';
+import styles from './index.module.css';
 
 const Home = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-            <h1>Welcome to Our Website</h1>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <img src={homeImage} alt="Home" style={{ width: '50%', borderRadius: '10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }} />
+        <div className={styles.container}>
+            <div className={styles.imageContainer}>
+                <img src={homeImage} alt="Home" className={styles.image} />
             </div>
-            <Link to="/auth" style={{ marginTop: '20px', textDecoration: 'none', backgroundColor: 'blue', color: 'white', padding: '10px 20px', borderRadius: '5px' }}>
-                Get Started
-            </Link>
+            <div className={styles.texts}>
+                <h1 className={styles.text}>Создай свой сад вместе со SmartGard</h1>
+                <Link to="/auth" className={styles.button}>
+                    Начать
+                </Link>
+            </div>
         </div>
     );
 };

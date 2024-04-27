@@ -1,8 +1,8 @@
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Item from "../item/index.jsx";
-import styles from './index.module.css';
-import Carousel from "../carousel/index.jsx";
 
-const plantsMock = [
+const itemsMock = [
     { id: 1, category: 'Розы', name: 'Роза', image: 'https://example.com/rose.jpg' },
     { id: 2, category: 'Папоротники', name: 'Папоротник', image: 'https://example.com/fern.jpg' },
     { id: 3, category: 'Луковичные', name: 'Гиацинт', image: 'https://example.com/hyacinth.jpg' },
@@ -25,28 +25,32 @@ const plantsMock = [
     { id: 20, category: 'Луковичные', name: 'Нарцисс', image: 'https://example.com/narcissus.jpg' },
     { id: 21, category: 'Луковичные', name: 'Ирис', image: 'https://example.com/iris.jpg' }
 ];
-const Catalog = () => {
+const Category = () => {
+    const { id } = useParams(); // Получаем параметр id из URL
+    const [category, setCategory] = useState('error');
+    //const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        // Здесь можно сделать запрос на сервер для получения информации по id
+        const selectedItem = itemsMock.find(item => item.id === parseInt(id));
+        //console.log(selectedItem,id)
+        if (selectedItem) {
+            setCategory(selectedItem.category);
+        }
+    }, [id]);
+    console.log(category)
     return (
-        <div className={styles.container}>
-
-            <h1>Категории</h1>
-            <div className={styles.category}>
-                <Carousel items={plantsMock.reduce((acc, cur) =>
-                    acc.includes(cur.category) ? acc : [...acc, cur], []).map((plant) => (
-                    <Item key={plant.id} {...plant} name={plant.category} url={plant.id}/>
-
-                ))}/>
-            </div>
-            <h1>Рекомендации</h1>
-            <div className={styles.category}>
-                <Carousel items={plantsMock.sort(() => Math.random() - 0.5).slice(0, 5).map((plant) => (
-                    <Item key={plant.id} {...plant} />
-                ))}/>
-
+        <div>
+            <h2>Category: {category}</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
+                {itemsMock
+                    .filter(item => item.category === category)
+                    .map(item => (
+                        <Item key={item.id} {...item} isTall />
+                    ))}
             </div>
         </div>
-
     );
-}
+};
 
-export default Catalog
+export default Category;

@@ -10,9 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "formik": "^2.4.6",
     "mobx-react-lite": "^4.0.7",
+    "moment": "^2.30.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-big-calendar": "^1.12.0",
+    "react-datepicker": "^6.9.0",
+    "react-dom": "^18.2.0",
+    "react-widgets": "^5.8.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

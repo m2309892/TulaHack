@@ -1,19 +1,24 @@
-import React, {useContext, useState} from 'react';
-import { useObserver } from 'mobx-react-lite';
-import {Context} from "../../main.jsx";
 import {LOGIN_URL, REGISTER_URL} from "../../constants.js";
 
-const AuthComponent = () => {
-    const { userStore } = useContext(Context)
+import { useContext, useState } from 'react';
+import {observer, useObserver} from 'mobx-react-lite';
+import { Context } from "../../main.jsx";
+import styles from './index.module.css';
+import {useNavigate} from "react-router-dom";
+
+const AuthComponent = observer(() => {
+    const { userStore } = useContext(Context);
+    const navigate = useNavigate();
     const isLoggedIn = userStore.getLoggedIn();
-    console.log(isLoggedIn)
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
 
     const handleRegister = async () => {
         try {
             // Отправляем запрос на регистрацию пользователя
-            await registerUser(username, password);
+            await registerUser(username, password, firstName, lastName);
             // Устанавливаем статус авторизации в true
             userStore.setLoggedIn(true);
         } catch (error) {
@@ -27,15 +32,17 @@ const AuthComponent = () => {
             await loginUser(username, password);
             userStore.setLoggedIn(true);
             console.log('logged in ')
+            navigate(`/catalog`);
+
         } catch (error) {
             console.error('Login failed:', error);
         }
     };
 
     // Mock функция для регистрации пользователя
-    const registerUser = async (username, password) => {
+    const registerUser = async (username, password, firstName, lastName) => {
         const mockResponse = { token: 'mock-token-for-registration' };
-        return mockAPIRequest(REGISTER_URL, { username, password }, mockResponse);
+        return mockAPIRequest(REGISTER_URL, { username, password, firstName, lastName }, mockResponse);
     };
 
     // Mock функция для входа пользователя
@@ -58,27 +65,29 @@ const AuthComponent = () => {
         });
     };
 
-    return useObserver(() => (
-        <div>
+    return (
+        <div className={styles.authContainer}>
             {!isLoggedIn && (
-                <div>
+                <div className={styles.authForm}>
                     <h2>Registration</h2>
-                    <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
-                    <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-                    <button onClick={handleRegister}>Register</button>
+                    <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className={styles.input} />
+                    <input type="text" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} className={styles.input} />
+                    <input type="text" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} className={styles.input} />
+                    <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className={styles.input} />
+                    <button onClick={handleRegister} className={styles.button}>Register</button>
                 </div>
             )}
 
             {isLoggedIn && (
-                <div>
+                <div className={styles.authForm}>
                     <h2>Login</h2>
-                    <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
-                    <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-                    <button onClick={handleLogin}>Login</button>
+                    <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className={styles.input} />
+                    <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className={styles.input} />
+                    <button onClick={handleLogin} className={styles.button} disabled={! (password && username)}>Login</button>
                 </div>
             )}
         </div>
-    ));
-};
+    );
+});
 
 export default AuthComponent;
