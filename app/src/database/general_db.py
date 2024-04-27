@@ -6,6 +6,8 @@ from fastapi import HTTPException, status
 
 from .models.models import *
 import src.schemas.general_schemas as schema
+import src.schemas.section_schemas as section_schema
+import src.schemas.plant_schemas as plant_schema
 from .db import Base
 
 
@@ -135,3 +137,147 @@ async def check_id_set_by_model(session: AsyncSession, table_obj: Base, check_id
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f'{table_obj.__table__.name}.id in {exclude_product_id} does not exist'
         )
+
+### SPECIFIC DB PROC
+
+async def get_section_list_by_user_id(session: AsyncSession, user_id: int):
+    section_list = await session.execute(
+        select(
+            Sections
+        ).where(
+            Sections.user_id == user_id
+        )
+    )
+    section_list = section_list.scalars().all()
+
+    section_list = [section_schema.SectionGet.model_validate(section, from_attributes=True) for section in section_list]
+    return section_list
+
+
+async def create_section(session: AsyncSession, section_data: list[section_schema.SectionCreate], user_id: int):
+    new_section_list = []
+    for sub_data in section_data:
+        new_section = Sections(user_id=user_id, **sub_data.model_dump())
+        session.add(new_section)
+        await session.flush()
+        new_section_list.append(new_section)
+
+    await session.commit()
+
+    new_section_list = [section_schema.SectionGet.model_validate(section, from_attributes=True) for section in new_section_list]
+    return new_section_list
+
+
+async def add_weather_note_to_section(session: AsyncSession, section_id: int, weather_note: section_schema.WeatherCreate):
+    new_weather_note = WeatherNotes(section_id=section_id, **weather_note.model_dump())
+    session.add(new_weather_note)
+    await session.commit()
+
+    new_weather_note = section_schema.WeatherGet.model_validate(new_weather_note, from_attributes=True)
+    return new_weather_note
+
+
+async def add_collection_plant(session: AsyncSession, section_id: int, plant_data_list: list[plant_schema.PlantCreate]):
+    new_plant_section = []
+    for sub_data in plant_data_list:
+        plant_section = SectionPlant(section_id=section_id, **sub_data.model_dump())
+        session.add(plant_section)
+        await session.flush()
+        new_plant_section.append(plant_section)
+
+    await session.commit()
+
+    new_plant_section = [plant_schema.PlantGet.model_validate(plant_section, from_attributes=True) for plant_section in new_plant_section]
+    return new_plant_section
+
+
+async def get_collection_plant_list(session: AsyncSession, section_id: int):
+    await check_id_by_model(session, Sections, section_id)
+
+    collection_plant_list = await session.execute(
+        select(
+            SectionPlant
+        ).where(
+            SectionPlant.section_id == section_id
+        )
+    )
+
+    collection_plant_list = collection_plant_list.scalars().all()
+
+    collection_plant_list = [plant_schema.PlantGet.model_validate(collection_plant, from_attributes=True) for collection_plant in collection_plant_list]
+    return collection_plant_list
+
+
+async def get_plant_list(session: AsyncSession, id_list: list[int] | None = None):
+    expr = select(Plants, Plants.plant_action)
+
+    if id_list:
+        expr = expr.where(Plants.id.in_(id_list))
+
+    plants_list = await session.execute(expr)
+    plants_list = [plant_schema.GeneralPlantGet.model_validate(plant, from_attributes=True) for plant in plants_list]
+
+    return plants_list
+
+
+async def create_plant(session: AsyncSession, plant_data_list: list[plant_schema.GeneralPlantCreate]):
+    new_plant_list = []
+    action_by_new_plant_id = {}
+    for sub_data in plant_data_list:
+        plant = Plants(**sub_data.model_dump())
+        session.add(plant)
+        await session.flush()
+
+        plant_action_list = []
+        for action_id in sub_data.actions:
+            plant_action = PlantActions(plant_id=plant.id, action_id=action_id)
+            session.add(plant_action)
+            await session.flush()
+            plant_action_list.append(plant_action)
+
+        action_by_new_plant_id[plant.id] = plant_action_list
+        new_plant_list.append(plant)
+
+    await session.commit()
+
+    res_new_plant_list = []
+    for plant in new_plant_list:
+        new_plant = plant_schema.GeneralPlantGet.model_validate(plant, from_attributes=True)
+
+        action_schema_list = []
+        for action in action_by_new_plant_id[new_plant]:
+           action_schema = plant_schema.PlantActionGet.model_validate(action, from_attributes=True)
+           action_schema_list.append(action_schema)
+
+        new_plant.actions = action_schema_list
+        res_new_plant_list.append(new_plant)
+
+    return res_new_plant_list
+
+
+async def get_plant_by_id(session: AsyncSession, plant_id: int):
+    plant = await session.execute(
+        select(
+            Plants
+        ).where(
+            Plants.id == plant_id
+        )
+    )
+    plant = await plant.scalar_one_or_none()
+    plant = plant_schema.GeneralPlantGet.model_validate(plant, from_attributes=True)
+    return plant
+
+
+async def update_plant_by_id(session: AsyncSession, plant_id: int, plant_data: plant_schema.GeneralPlantCreate):
+    await check_id_by_model(session, Plants, plant_id)
+
+    plant = await session.execute(
+        select(
+            Plants
+        ).where(
+            Plants.id == plant_id
+        )
+    )
+
+    plant = await plant.scalar_one_or_none()
+    await plant.update(**plant_data.model_dump())

@@ -12,7 +12,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
-from src.schemas.plant_schemas import SoilType, PlantType, AciditySoilType, MoveType
+from src.schemas.plant_schemas import SoilType, PlantType, AciditySoilType # , ActionType
 
 
 class User(Base):
@@ -57,7 +57,7 @@ class Plants(Base):
     soil_acidity_type: Mapped[AciditySoilType]
 
     section_plant: Mapped['SectionPlant'] = relationship(back_populates='plant')
-    plant_action: Mapped['PlantActions'] = relationship(back_populates='plant')
+    plant_action: Mapped[list['PlantActions']] = relationship(back_populates='plant')
 
 
 class SectionPlant(Base):
@@ -67,7 +67,7 @@ class SectionPlant(Base):
     section_id: Mapped[int] = mapped_column(ForeignKey('sections.id'))
     plant_id: Mapped[int] = mapped_column(ForeignKey('plants.id'))
 
-    name: Mapped[str]
+    nickname: Mapped[str]
     planting_time: Mapped[datetime] = mapped_column(server_default=func.now())
 
     section: Mapped['Sections'] = relationship(back_populates='section_plant')
@@ -80,7 +80,7 @@ class Actions(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
 
-    name: Mapped[MoveType]
+    name: Mapped[str]
 
     plant_action: Mapped['PlantActions'] = relationship(back_populates='action')
     plant_action_note: Mapped['PlantActionNotes'] = relationship(back_populates='action')
@@ -116,6 +116,7 @@ class WeatherNotes(Base):
     __tablename__ = 'weather_notes'
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    section_id: Mapped[int] = mapped_column(ForeignKey('sections.id'))
 
     date: Mapped[datetime] = mapped_column(server_default=func.now())
     temperature: Mapped[float] # Температура

@@ -5,47 +5,75 @@ from src.schemas.section_schemas import *
 from src.schemas.plant_schemas import *
 import src.database.general_db as db
 import src.database.models.models as models
-import src.database.models.user_plants as model
-
 from src.services.api.general_api import *
 
 
-async def create_section(session: AsyncSession, section_data: list[SectionCreate]):
-    new_section = await db.create_object(session, model.Sections, section_data)
+async def create_section(session: AsyncSession, section_data: list[SectionCreate], user_id: int):
+    new_section = await db.create_section(session, section_data, user_id)
     return new_section
 
 
 async def get_section_list(session: AsyncSession, id_list: list[int] | None = None):
-    section_list = await db.get_obj_list(session, model.Sections, SectionGet, id_list)
+    section_list = await db.get_obj_list(session, models.Sections, SectionGet, id_list)
+    return section_list
+
+
+async def get_section_list_by_user_id(session: AsyncSession, user_id: int):
+    section_list = await db.get_section_list_by_user_id(session, user_id)
     return section_list
 
 
 async def get_section_by_id(session: AsyncSession, section_id: int):
-    section = await db.get_obj_by_id(session, model.Sections, section_id, SectionGet)
+    section = await db.get_obj_by_id(session, models.Sections, section_id, SectionGet)
     return section
 
 
-async def update_section_by_id(session: AsyncSession, section_id: int, section_data: SectionCreate):
-    await db.update_obj_by_id(session, model.Sections, section_id, section_data)
+async def update_section_by_id(session: AsyncSession, section_id: int, section_new_data: SectionCreate):
+    await db.update_obj_by_id(session, models.Sections, section_id, section_new_data)
 
 
+async def add_weather_note_to_section(session: AsyncSession, section_id: int, weather_note: WeatherCreate):
+    new_weather_note = await db.add_weather_note_to_section(session, section_id, weather_note)
+    return new_weather_note
 
 
-
-async def create_company(session: AsyncSession, company_data: list[CompanyCreate]):
-    new_company = await db.create_object(session, models.LegalCompany, company_data)
-    return new_company
-
-
-async def get_company_list(session: AsyncSession, id_list: list[int] | None = None):
-    company_list = await db.get_obj_list(session, models.LegalCompany, CompanyData, id_list)
-    return company_list
+async def add_collection_plant(session: AsyncSession, section_id: int, plant_data_list: list[PlantCreate]):
+    new_plant_section = await db.add_collection_plant(session, section_id, plant_data_list)
+    return new_plant_section
 
 
-async def get_company_by_id(session: AsyncSession, company_id: int):
-    company = await db.get_obj_by_id(session, models.LegalCompany, company_id, CompanyData)
-    return company
+async def get_collection_plant_list(session: AsyncSession, section_id: int):
+    collection_plant_list = await db.get_collection_plant_list(session, section_id)
+    return collection_plant_list
 
 
-async def update_company_by_id(session: AsyncSession, company_id: int, company_data: CompanyCreate):
-    await db.update_obj_by_id(session, models.LegalCompany, company_id, company_data)
+async def get_collection_plant_by_id(session: AsyncSession, collection_plant_id: int):
+    collection_plant = await db.get_obj_by_id(session, models.SectionPlant, collection_plant_id, PlantGet)
+    return collection_plant
+
+
+async def upadate_collection_plant(session: AsyncSession, collection_plant_id: int, plant_new_data: PlantCreate):
+    await db.update_obj_by_id(session, models.SectionPlant, collection_plant_id, plant_new_data)
+
+
+# TODO протестить, что внутри GeneralPlantCreate есть PlantActionGet
+async def get_plant_list(session: AsyncSession, id_list: list[int] | None = None):
+    plant_list = await db.get_plant_list(session, id_list)
+    return plant_list
+
+
+# TODO протестить, что внутри GeneralPlantCreate есть PlantActionGet
+async def create_plant(session: AsyncSession, plant_data_list: list[GeneralPlantCreate]):
+    new_plant = await db.create_plant(session, plant_data_list)
+    return new_plant
+
+
+# TODO протестить, что внутри GeneralPlantCreate есть PlantActionGet
+async def get_plant_by_id(session: AsyncSession, plant_id: int):
+    plant = await db.get_plant_by_id(session, plant_id)
+    return plant
+
+
+# TODO протестить, что внутри GeneralPlantCreate есть PlantActionGet
+async def update_plant_by_id(session: AsyncSession, plant_id: int, plant_data: GeneralPlantCreate):
+    await db.update_plant_by_id(session, plant_id, plant_data)

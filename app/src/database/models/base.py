@@ -1,11 +1,8 @@
-from sqlalchemy.orm import declarative_base, DeclarativeMeta
+from sqlalchemy.orm import declarative_base, DeclarativeBase
 
-# Base = declarative_base()
 
-class MyBaseClass(object):
+class Base(DeclarativeBase):
     async def update(self, **kwargs):
         for key, val in kwargs.items():
             if hasattr(self, key) and val:
                 setattr(self, key, val)
-
-Base = declarative_base(cls=MyBaseClass, metaclass=DeclarativeMeta)
