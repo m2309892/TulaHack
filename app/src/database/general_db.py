@@ -250,7 +250,7 @@ async def get_plant_by_id(session: AsyncSession, plant_id: int):
             Plants.id == plant_id
         )
     )
-    plant = await plant.scalar_one_or_none()
+    plant = plant.scalar_one_or_none()
     plant = plant_schema.GeneralPlantGet.model_validate(plant, from_attributes=True)
     return plant
 
@@ -266,5 +266,5 @@ async def update_plant_by_id(session: AsyncSession, plant_id: int, plant_data: p
         )
     )
 
-    plant = await plant.scalar_one_or_none()
+    plant = plant.scalar_one_or_none()
     await plant.update(**plant_data.model_dump())
