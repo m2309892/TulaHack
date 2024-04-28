@@ -39,8 +39,8 @@ class GeneralPlantCreate(BaseModel):
     plant_type: PlantType
     temperature: float
     humidity: float
-    soil_type: SoilType
-    soil_acidity_type: AciditySoilType
+    soil_type: SoilType | None = None
+    soil_acidity_type: AciditySoilType | None = None
 
 
 class GeneralPlantGet(GeneralPlantCreate):
