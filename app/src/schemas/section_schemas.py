@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from plant_schemas import SoilType
+from src.schemas.plant_schemas import SoilType
 
 
 class SectionCreate(BaseModel):

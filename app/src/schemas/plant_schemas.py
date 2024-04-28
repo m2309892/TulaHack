@@ -56,10 +56,6 @@ class GeneralPlantGet(GeneralPlantCreate):
     actions: list[PlantActionGet] | None = None
 
 
-
-class GeneralPlantGetActions(GeneralPlantGet):
-
-
 class PlantCreate(BaseModel):
     plant_id: int
     nickname: str
