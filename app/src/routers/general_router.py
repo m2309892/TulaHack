@@ -52,14 +52,14 @@ async def route_update_section(section_id: int, section_new_data: SectionCreate,
     return data
 
 
-@general_router.post('/section/{section_id}/weather-note')
+@general_router.post('/section/{section_id}/weather-note', response_model=WeatherGet)
 async def route_add_weather_note_to_section(section_id: int, weather_note: WeatherCreate, current_user: CurrentUser, session: Session):
     weather_note = await add_weather_note_to_section(session, section_id, weather_note)
     return weather_note
 
 
 # PLANTS COLLECTIONS
-@general_router.post('/section/{section_id}/collection-plant')
+@general_router.post('/section/{section_id}/collection-plant', response_model=PlantGet)
 async def route_add_collection_plant(section_id: int, plant_data_list: list[PlantCreate], current_user: CurrentUser, session: Session):
     new_plant_section = await add_collection_plant(session, section_id, plant_data_list)
     return new_plant_section
@@ -78,7 +78,7 @@ async def route_get_collection_plant_by_id(section_id: int, collection_plant_id:
     return section
 
 
-@general_router.patch('/section/{section_id}/collection-plant/{collection_plant_id}')
+@general_router.patch('/section/{section_id}/collection-plant/{collection_plant_id}', response_model=PlantGet)
 async def route_upadate_collection_plant(section_id: int, collection_plant_id: int, plant_new_data: PlantCreate, current_user: CurrentUser, session: Session):
     await upadate_collection_plant(session, collection_plant_id, plant_new_data)
     data = {
@@ -91,19 +91,19 @@ async def route_upadate_collection_plant(section_id: int, collection_plant_id: i
 
 
 # PLANTS
-@general_router.get('/plant')
+@general_router.get('/plant', response_model=GeneralPlantGet)
 async def route_get_plant_list(current_user: CurrentUser, session: Session,  id_list: IDList = None):
     plant_list = await get_plant_list(session, id_list)
     return plant_list
 
 
-@general_router.post('/plant')
+@general_router.post('/plant', response_model=GeneralPlantGet)
 async def route_create_plant(plant_data_list: list[GeneralPlantCreate], current_user: CurrentUser, session: Session):
     new_plant = await create_plant(session, plant_data_list)
     return new_plant
 
 
-@general_router.get('/plant/{plant_id}')
+@general_router.get('/plant/{plant_id}', response_model=GeneralPlantGet)
 async def route_get_plant_by_id(plant_id: int, current_user: CurrentUser, session: Session):
     plant = await get_plant_by_id(session, plant_id)
     return plant
