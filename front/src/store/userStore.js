@@ -363,7 +363,7 @@ class UserStore {
         return this.folders;
     }
 
-    // Добавить папку пользователя
+    // Добавить папку пользователя section === folder
     addUserFolder(folder) {
         this.folders.push(folder);
     }

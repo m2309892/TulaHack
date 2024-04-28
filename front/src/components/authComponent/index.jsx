@@ -1,10 +1,9 @@
-import {LOGIN_URL, REGISTER_URL} from "../../constants.js";
-
 import { useContext, useState } from 'react';
-import {observer, useObserver} from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import { Context } from "../../main.jsx";
 import styles from './index.module.css';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { registerUser, loginUser } from "../../api.js"; // Импорт функций для регистрации и входа пользователя
 
 const AuthComponent = observer(() => {
     const { userStore } = useContext(Context);
@@ -31,38 +30,11 @@ const AuthComponent = observer(() => {
             // Отправляем запрос на вход пользователя
             await loginUser(username, password);
             userStore.setLoggedIn(true);
-            console.log('logged in ')
             navigate(`/catalog`);
-
         } catch (error) {
             console.error('Login failed:', error);
+            userStore.setLoggedIn(false);
         }
-    };
-
-    // Mock функция для регистрации пользователя
-    const registerUser = async (username, password, firstName, lastName) => {
-        const mockResponse = { token: 'mock-token-for-registration' };
-        return mockAPIRequest(REGISTER_URL, { username, password, firstName, lastName }, mockResponse);
-    };
-
-    // Mock функция для входа пользователя
-    const loginUser = async (username, password) => {
-        const mockResponse = { token: 'mock-token-for-login' };
-        return mockAPIRequest(LOGIN_URL, { username, password }, mockResponse);
-    };
-
-    // Mock API запрос
-    const mockAPIRequest = async (url, data, responseData) => {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const success = Math.random() < 0.8; // Симуляция 80% успешности запроса
-                if (success) {
-                    resolve(responseData);
-                } else {
-                    reject(new Error('Failed to fetch data'));
-                }
-            }, 1000);
-        });
     };
 
     return (
