@@ -65,7 +65,6 @@ async def route_add_collection_plant(section_id: int, plant_data_list: list[Plan
     return new_plant_section
 
 
-# TODO добавить какие-то фильтры?
 @general_router.get('/section/{section_id}/collection-plant', response_model=list[PlantGet])
 async def route_get_collection_plant_list(section_id: int, current_user: CurrentUser, session: Session):
     section = await get_collection_plant_list(session, section_id)
@@ -86,8 +85,12 @@ async def route_upadate_collection_plant(section_id: int, collection_plant_id: i
     }
     return data
 
-# TODO Элемент коллекции - занести запланированное/сделаное действие с датой
-# TODO Элемент коллекции - изменить действие с датой
+# TODO Подсказка действия по коллекции
+@general_router.get('/section/{section_id}/collection-plant/{collection_plant_id}/get-hint', response_model=PlantGet)
+async def route_get_hint_to_collection_plant(section_id: int, collection_plant_id: int, current_user: CurrentUser, session: Session):
+    # section = await get_hint_to_collection_plant(session, collection_plant_id)
+    # return section
+    pass
 
 
 # PLANTS
@@ -116,3 +119,25 @@ async def route_update_plant_by_id(plant_id: int, plant_data: GeneralPlantCreate
         'message': 'successful'
     }
     return data
+
+@general_router.post('/ai-hint', response_model=list[HintGet])
+async def route_load_ai_hint(hint_data: list[HintCreate], current_user: CurrentUser, session: Session):
+    hint = await load_ai_hint(session, hint_data)
+    return hint
+
+
+@general_router.get('/ai-hint',  response_model=HintGet)
+async def route_get_ai_hint(current_user: CurrentUser, session: Session):
+    hint = await get_ai_hint(session, current_user.id)
+    return hint
+
+
+# TODO Загрузка данных
+@general_router.post('/fastload')
+async def route_fast_load(current_user: CurrentUser, session: Session):
+    # await fast_load(session)
+    # data = {
+    #     'message': 'successful'
+    # }
+    # return data
+    pass

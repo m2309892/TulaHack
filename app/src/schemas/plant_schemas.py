@@ -35,6 +35,7 @@ class ActionType(str, Enum):
 
 class GeneralPlantCreate(BaseModel):
     name: str
+    image: str = ''
     plant_type: PlantType
     temperature: float
     humidity: float
@@ -67,3 +68,11 @@ class PlantActionNotesCreate(BaseModel):
 class PlantActionNotesGet(PlantActionNotesCreate):
     id: int
     plant_id: int
+
+
+class HintCreate(BaseModel):
+    text: str
+
+
+class HintGet(HintCreate):
+    id: int

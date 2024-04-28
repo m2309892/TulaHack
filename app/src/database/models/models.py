@@ -51,6 +51,7 @@ class Plants(Base):
 
     name: Mapped[str]
     plant_type: Mapped[PlantType]
+    image: Mapped[str]
     temperature: Mapped[float]
     humidity: Mapped[float]
     soil_type: Mapped[SoilType]
@@ -124,3 +125,9 @@ class WeatherNotes(Base):
     rainfall: Mapped[float] # Осадки
 
     sections: Mapped['Sections'] = relationship(back_populates='weather_notes')
+
+
+class Hint(Base):
+    __tablename__ = 'hint'
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    text: Mapped[str]

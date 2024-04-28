@@ -103,6 +103,12 @@ async def update_obj_by_id(session: AsyncSession, table_obj: Base, obj_id: int, 
     await session.commit()
 
 
+async def get_hint_to_collection_plant(session: AsyncSession, collection_plant_id: int):
+    hint = ''
+
+    return hint
+
+
 async def check_id_by_model(session: AsyncSession, table_obj: Base, check_id: int):
     check = await session.execute(
         select(
@@ -211,7 +217,7 @@ async def get_collection_plant_list(session: AsyncSession, section_id: int):
 
 
 async def get_plant_list(session: AsyncSession, id_list: list[int] | None = None):
-    expr = select(Plants, Plants.plant_action)
+    expr = select(Plants, Plants)
 
     if id_list:
         expr = expr.where(Plants.id.in_(id_list))

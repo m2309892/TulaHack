@@ -1,3 +1,5 @@
+import random
+
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -56,25 +58,43 @@ async def upadate_collection_plant(session: AsyncSession, collection_plant_id: i
     await db.update_obj_by_id(session, models.SectionPlant, collection_plant_id, plant_new_data)
 
 
-# TODO протестить, что внутри GeneralPlantCreate есть PlantActionGet
+async def get_hint_to_collection_plant(session: AsyncSession, collection_plant_id: int):
+    hint = await db.get_hint_to_collection_plant(session, collection_plant_id)
+    return hint
+
+
 async def get_plant_list(session: AsyncSession, id_list: list[int] | None = None):
     plant_list = await db.get_plant_list(session, id_list)
     return plant_list
 
 
-# TODO протестить, что внутри GeneralPlantCreate есть PlantActionGet
 async def create_plant(session: AsyncSession, plant_data_list: list[GeneralPlantCreate]):
     new_plant = await db.create_plant(session, plant_data_list)
     return new_plant
 
 
-# TODO протестить, что внутри GeneralPlantCreate есть PlantActionGet
+# TODO ФИКС
 async def get_plant_by_id(session: AsyncSession, plant_id: int):
     plant = await db.get_plant_by_id(session, plant_id)
     return plant
 
 
-# TODO протестить, что внутри GeneralPlantCreate есть PlantActionGet
 async def update_plant_by_id(session: AsyncSession, plant_id: int, plant_data: GeneralPlantCreate):
     await db.update_plant_by_id(session, plant_id, plant_data)
 
+
+async def load_ai_hint(session: AsyncSession, hint_data: list[HintCreate]):
+    hint = await db.create_object(session, models.Hint, hint_data, HintGet)
+    return hint
+
+
+async def get_ai_hint(session: AsyncSession, user_id: int):
+    hint_list = await db.get_obj_list(session, models.Hint, HintGet)
+    hint = random.choice(hint_list)
+    return hint
+
+
+async def fast_load(session: AsyncSession):
+    
+
+    pass
