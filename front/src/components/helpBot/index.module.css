@@ -1,0 +1,60 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dialog {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+.messageWrapper {
+    margin-bottom: 10px;
+}
+
+.userMessage {
+    background-color: #ffffff;
+    color: #333333;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.botMessage {
+    background-color: #def2e6;
+    color: #333333;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.form {
+    display: flex;
+    align-items: center;
+}
+
+.input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #aaaaaa;
+}
+
+.submitButton {
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #00796b;
+    color: #ffffff;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.submitButton:hover {
+    background-color: #004d40;
+}

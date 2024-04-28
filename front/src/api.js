@@ -53,6 +53,86 @@ export async function getAllSections() {
         throw new Error('Failed to fetch all sections');
     }
 }
+export async function getSection() {
+    try {
+        const response = await axios.get(`/general/section`, {
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch section data');
+    }
+}
+
+export async function getPlantsBySection(sectionId, ) {
+    try {
+        const response = await axios.get(
+            `http://itut.itatmisis.ru:8000/general/section/${sectionId}/collection-plant`,
+            {
+                headers: {
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MTQ4ODIwODV9.uVXG0S-yMYot4p-p1ZDZcc9iqzUfAYeL3pmpdUi5pC4',
+                    'accept': 'application/json'
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch section collection');
+    }
+}
+export async function getPlantById(sectionId, plantId) {
+    const url = `http://itut.itatmisis.ru:8000/general/section/${sectionId}/collection-plant/${plantId}`;
+    const token = localStorage.getItem('token');
+    const headers = {
+        'accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
+    try {
+        const response = await axios.get(url, { headers });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch plant data');
+    }
+}
+export async function addPlantToCollection(sectionId, plants) {
+    const url = `http://itut.itatmisis.ru:8000/general/section/${sectionId}/collection-plant`;
+    const token = localStorage.getItem('token');
+    const headers = {
+        'accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        const response = await axios.post(url, plants, { headers });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to add plant to collection');
+    }
+}
+
+export const addPlant = async (plantData, token) => {
+    try {
+        const response = await axios.post(
+            'http://itut.itatmisis.ru:8000/general/plant',
+            plantData,
+            {
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to add plant:', error);
+    }
+};
 
 // Функция для отправки GET-запроса на получение всех растений
 export async function getAllPlants() {
@@ -68,18 +148,19 @@ export async function getAllPlants() {
     }
 }
 
-// Функция для отправки GET-запроса на получение данных о конкретном растении по его ID
-export async function getPlantById(plantId) {
+export const aiHelp = async (query) => {
     try {
-        const response = await axios.get(`/general/plant/${plantId}`, {
-            headers: {
-                'accept': 'application/json'
-            }
+        const response = await axios.get('http://itut.itatmisis.ru:8000/general/ai-hint', {
+            params: { query },
+            headers: { 'Accept': 'application/json' }
         });
-        return response.data;
+
+        return response.data.answer;
     } catch (error) {
-        throw new Error('Failed to fetch plant data');
+        console.error('Failed to fetch AI hint:', error);
+        return 'Sorry, something went wrong. Please try again later.';
     }
-}
+};
+
 
 

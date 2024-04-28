@@ -1,23 +1,22 @@
-import { useContext, useEffect, useState } from "react";
-import { Context } from "../../main.jsx";
+import { useContext, useEffect, useState } from 'react';
+import { Context } from '../../main.jsx';
 import styles from './index.module.css';
-import Carousel from "../carousel/index.jsx";
-import { getAllSections} from "../../api.js"; // Импорт функции для получения всех растений
-import Item from "../item/index.jsx";
+import Carousel from '../carousel/index.jsx';
+import { getAllSections } from '../../api.js';
+import Item from '../item/index.jsx';
 
 const Catalog = () => {
     const { userStore } = useContext(Context);
-    const [items, setItems] = useState([]);
-    console.log(items)
+    const [sections, setSections] = useState([]);
+    console.log('sections',sections)
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Получаем все растения с помощью новой функции из API
-                const plants = await getAllSections();
-                console.log(plants)
-                setItems(plants);
+                // Получаем все разделы с помощью новой функции из API
+                const sectionsData = await getAllSections();
+                setSections(sectionsData);
             } catch (error) {
-                console.error('Failed to fetch plants:', error);
+                console.error('Failed to fetch sections:', error);
             }
         };
 
@@ -28,16 +27,15 @@ const Catalog = () => {
         <div className={styles.container}>
             <h1>Категории</h1>
             <div className={styles.category}>
-                <Carousel items={items.reduce((acc, cur) =>
-                    acc.includes(cur.category) ? acc : [...acc, cur.category], []).map((category) => (
-                    <Item key={category} name={category} url={category} />
-                ))} />
+                {sections && <Carousel items={sections.map(section => (
+                    <Item key={section.name} name={section.name} url={section.name} />
+                ))} /> }
             </div>
             <h1>Рекомендации</h1>
             <div className={styles.category}>
-                <Carousel items={items.sort(() => Math.random() - 0.5).slice(0, 5).map((plant) => (
-                    <Item key={plant.id} {...plant} />
-                ))} />
+                {sections && <Carousel items={sections.slice().sort(() => Math.random() - 0.5).slice(0, 5).map(section => (
+                    <Item key={section.name} name={section.name} location={section.location_name} soilType={section.soil_type} />
+                ))} />}
             </div>
         </div>
     );

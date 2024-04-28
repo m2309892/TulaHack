@@ -8,12 +8,14 @@ import AuthComponent from "./components/authComponent/index.jsx";
 import Category from "./components/category/index.jsx";
 import ItemPage from "./components/itemPage/index.jsx";
 import AddPlantForm from "./components/addPlant/index.jsx";
+import HelpBot from "./components/helpBot/index.jsx";
 
 export const privateRoutes = [
     { path: '/my-plants', Component: MyPlants },
     { path: '/feed', Component: Feed },
     { path: '/calendar', Component: Calendar },
     { path: '/account', Component: Account },
+    { path: '/help', Component: HelpBot }
 ];
 
 export const publicRoutes = [
