@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './index.module.css';
@@ -6,6 +6,7 @@ import {Context} from "../../main.jsx";
 
 const Item = ({ id, name, image, url = '', isTall = false }) => {
     const { userStore } = useContext(Context);
+    const [addText,setAddText] = useState('Добавить')
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -20,9 +21,9 @@ const Item = ({ id, name, image, url = '', isTall = false }) => {
         const plants = userStore.getAllUserPlants();
         if (!plants.find(el=>el.id === id)) {
 
-            userStore.addUserPlant({id, name, image})
+            userStore.addUserPlant({id:1, name, image, });
+            setAddText('Добавлено!');
         }
-        console.log(plants)
     }
     if (isTall) {
         return (
@@ -35,7 +36,7 @@ const Item = ({ id, name, image, url = '', isTall = false }) => {
                 />
                 <div className={styles.tallContent}>
                     <h3>{name}</h3>
-                    <button className={styles.addButton} onClick={handleAdd}>Добавить
+                    <button className={styles.addButton} onClick={handleAdd}>{addText}
                     </button>
                 </div>
             </div>

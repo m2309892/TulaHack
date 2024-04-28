@@ -1,0 +1,9 @@
+.folder {
+    margin-top: 20px;
+    margin-left: 10vw;
+}
+
+.texts {
+    display: flex;
+    gap: 15px;
+}

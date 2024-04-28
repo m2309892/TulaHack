@@ -1,4 +1,5 @@
 import Slider from 'infinite-react-carousel';
+import styles from './index.module.css'
 const Carousel = ({items}) => {
 
     const settings =  {
@@ -7,9 +8,12 @@ const Carousel = ({items}) => {
         slidesToShow: 4
     };
     return (
-        <Slider  {...settings}>
-            {items}
-        </Slider>
+        <div className={styles.carousel}>
+            <Slider  {...settings}>
+                {items}
+            </Slider>
+        </div>
+
     );
 };
 

@@ -3,14 +3,17 @@ import { Formik, Form, Field } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../../main.jsx';
 import styles from './index.module.css';
-import { useNavigate } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const AddPlantForm = observer(() => {
     const { userStore } = useContext(Context);
     const navigate = useNavigate();
+    const {state} = useLocation();
+    const { folderId, folderName } =state || {}; // Получение параметров из location.state
+    console.log('here ',state)
     const initialValues = {
         customName: '',
-        folderId: '', // Изменено с folder на folderId
+        folderId: folderId || '',
         plantingDate: '',
         lastWateringDate: ''
     };
@@ -56,7 +59,7 @@ const AddPlantForm = observer(() => {
                     </div>
                     <div className={styles.formContainer}>
                         <Field type="text" name="customName" placeholder="Custom Name" className={styles.input} />
-                        <Field type="text" name="folderId" placeholder="Folder Name" className={styles.input} />
+                        <Field type="text" name="folderId" placeholder={`${folderName || 'Folder Name'}`} className={styles.input} />
                         <Field type="date" name="plantingDate" className={styles.input} />
                         <Field type="date" name="lastWateringDate" className={styles.input} />
                         <button type="submit" className={styles.button}>Submit</button>
