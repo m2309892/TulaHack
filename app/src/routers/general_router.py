@@ -85,12 +85,6 @@ async def route_upadate_collection_plant(section_id: int, collection_plant_id: i
     }
     return data
 
-# TODO Подсказка действия по коллекции
-@general_router.get('/section/{section_id}/collection-plant/{collection_plant_id}/get-hint', response_model=PlantGet)
-async def route_get_hint_to_collection_plant(section_id: int, collection_plant_id: int, current_user: CurrentUser, session: Session):
-    # section = await get_hint_to_collection_plant(session, collection_plant_id)
-    # return section
-    pass
 
 
 # PLANTS
@@ -129,6 +123,18 @@ async def route_load_ai_hint(hint_data: list[HintCreate], current_user: CurrentU
 @general_router.get('/ai-hint',  response_model=HintGet)
 async def route_get_ai_hint(current_user: CurrentUser, session: Session):
     hint = await get_ai_hint(session, current_user.id)
+    return hint
+
+
+@general_router.post('/catboost-hint', response_model=list[HintGet])
+async def route_get_hint_to_collection_plant(hint_data: list[HintCreate], current_user: CurrentUser, session: Session):
+    hint = await load_catboost_hint(session, hint_data)
+    return hint
+
+
+@general_router.get('/catboost-hint', response_model=HintGet)
+async def route_load_hint_to_collection_plant(current_user: CurrentUser, session: Session):
+    hint = await get_catboost_hint(session, current_user.id)
     return hint
 
 

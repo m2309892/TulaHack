@@ -131,3 +131,9 @@ class Hint(Base):
     __tablename__ = 'hint'
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     text: Mapped[str]
+
+
+class CatHint(Base):
+    __tablename__ = 'cat_hint'
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    text: Mapped[str]

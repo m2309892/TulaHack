@@ -58,7 +58,10 @@ async def upadate_collection_plant(session: AsyncSession, collection_plant_id: i
     await db.update_obj_by_id(session, models.SectionPlant, collection_plant_id, plant_new_data)
 
 
-async def get_hint_to_collection_plant(session: AsyncSession, collection_plant_id: int):
+async def get_hint_to_collection_plant(session: AsyncSession, section_id: int, collection_plant_id: int):
+    plant_data = await db.get_collection_plant_list(session, section_id)
+    plant_data = [plant for plant in plant_data if plant.id == collection_plant_id]
+
     hint = await db.get_hint_to_collection_plant(session, collection_plant_id)
     return hint
 
@@ -94,7 +97,16 @@ async def get_ai_hint(session: AsyncSession, user_id: int):
     return hint
 
 
-async def fast_load(session: AsyncSession):
-    
+async def load_catboost_hint(session: AsyncSession, hint_data: list[HintCreate]):
+    hint = await db.create_object(session, models.CatHint, hint_data, HintGet)
+    return hint
 
+
+async def get_catboost_hint(session: AsyncSession, user_id: int):
+    hint_list = await db.get_obj_list(session, models.CatHint, HintGet)
+    hint = random.choice(hint_list)
+    return hint
+
+
+async def fast_load(session: AsyncSession):
     pass
