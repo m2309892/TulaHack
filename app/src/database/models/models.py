@@ -18,8 +18,8 @@ from src.schemas.plant_schemas import SoilType, PlantType, AciditySoilType # , A
 class User(Base):
     __tablename__ = 'user'
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, unique=True)
-    first_name: Mapped[str]
-    last_name: Mapped[str]
+    first_name: Mapped[str] = mapped_column(nullable=True)
+    last_name: Mapped[str] = mapped_column(nullable=True)
     login: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
@@ -40,7 +40,7 @@ class Sections(Base):
     location_y: Mapped[float] = mapped_column(default=37.6156)
 
     user: Mapped['User'] = relationship(back_populates='sections')
-    weather_note: Mapped['WeatherNotes'] = relationship(back_populates='sections')
+    weather_notes: Mapped['WeatherNotes'] = relationship(back_populates='sections')
     section_plant: Mapped['SectionPlant'] = relationship(back_populates='section')
 
 
@@ -123,4 +123,4 @@ class WeatherNotes(Base):
     humidity: Mapped[float] # Влажность
     rainfall: Mapped[float] # Осадки
 
-    section: Mapped['Sections'] = relationship(back_populates='weather_notes')
+    sections: Mapped['Sections'] = relationship(back_populates='weather_notes')

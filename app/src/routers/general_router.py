@@ -59,14 +59,14 @@ async def route_add_weather_note_to_section(section_id: int, weather_note: Weath
 
 
 # PLANTS COLLECTIONS
-@general_router.post('/section/{section_id}/collection-plant', response_model=PlantGet)
+@general_router.post('/section/{section_id}/collection-plant', response_model=list[PlantGet])
 async def route_add_collection_plant(section_id: int, plant_data_list: list[PlantCreate], current_user: CurrentUser, session: Session):
     new_plant_section = await add_collection_plant(session, section_id, plant_data_list)
     return new_plant_section
 
 
 # TODO добавить какие-то фильтры?
-@general_router.get('/section/{section_id}/collection-plant', response_model=PlantGet)
+@general_router.get('/section/{section_id}/collection-plant', response_model=list[PlantGet])
 async def route_get_collection_plant_list(section_id: int, current_user: CurrentUser, session: Session):
     section = await get_collection_plant_list(session, section_id)
     return section
@@ -91,13 +91,13 @@ async def route_upadate_collection_plant(section_id: int, collection_plant_id: i
 
 
 # PLANTS
-@general_router.get('/plant', response_model=GeneralPlantGet)
+@general_router.get('/plant', response_model=list[GeneralPlantGet])
 async def route_get_plant_list(current_user: CurrentUser, session: Session,  id_list: IDList = None):
     plant_list = await get_plant_list(session, id_list)
     return plant_list
 
 
-@general_router.post('/plant', response_model=GeneralPlantGet)
+@general_router.post('/plant', response_model=list[GeneralPlantGet])
 async def route_create_plant(plant_data_list: list[GeneralPlantCreate], current_user: CurrentUser, session: Session):
     new_plant = await create_plant(session, plant_data_list)
     return new_plant

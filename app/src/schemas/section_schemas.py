@@ -13,7 +13,7 @@ class SectionCreate(BaseModel):
     soil_type: SoilType
 
 
-class SectionGet(BaseModel):
+class SectionGet(SectionCreate):
     id: int
 
 
