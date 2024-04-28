@@ -178,6 +178,8 @@ async def add_weather_note_to_section(session: AsyncSession, section_id: int, we
 
 
 async def add_collection_plant(session: AsyncSession, section_id: int, plant_data_list: list[plant_schema.PlantCreate]):
+    plant_id_set = set(plant.plant_id for plant in plant_data_list)
+    await check_id_set_by_model(session, Plants, plant_id_set)
     new_plant_section = []
     for sub_data in plant_data_list:
         plant_section = SectionPlant(section_id=section_id, **sub_data.model_dump())
@@ -222,37 +224,16 @@ async def get_plant_list(session: AsyncSession, id_list: list[int] | None = None
 
 async def create_plant(session: AsyncSession, plant_data_list: list[plant_schema.GeneralPlantCreate]):
     new_plant_list = []
-    action_by_new_plant_id = {}
     for sub_data in plant_data_list:
         plant = Plants(**sub_data.model_dump())
         session.add(plant)
         await session.flush()
-
-        plant_action_list = []
-        for action_id in sub_data.actions:
-            plant_action = PlantActions(plant_id=plant.id, action_id=action_id)
-            session.add(plant_action)
-            await session.flush()
-            plant_action_list.append(plant_action)
-
-        action_by_new_plant_id[plant.id] = plant_action_list
         new_plant_list.append(plant)
 
     await session.commit()
+    new_plant_list = [plant_schema.GeneralPlantGet.model_validate(plant, from_attributes=True) for plant in new_plant_list]
 
-    res_new_plant_list = []
-    for plant in new_plant_list:
-        new_plant = plant_schema.GeneralPlantGet.model_validate(plant, from_attributes=True)
-
-        action_schema_list = []
-        for action in action_by_new_plant_id[new_plant]:
-           action_schema = plant_schema.PlantActionGet.model_validate(action, from_attributes=True)
-           action_schema_list.append(action_schema)
-
-        new_plant.actions = action_schema_list
-        res_new_plant_list.append(new_plant)
-
-    return res_new_plant_list
+    return new_plant_list
 
 
 async def get_plant_by_id(session: AsyncSession, plant_id: int):

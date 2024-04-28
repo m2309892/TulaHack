@@ -77,3 +77,4 @@ async def get_plant_by_id(session: AsyncSession, plant_id: int):
 # TODO протестить, что внутри GeneralPlantCreate есть PlantActionGet
 async def update_plant_by_id(session: AsyncSession, plant_id: int, plant_data: GeneralPlantCreate):
     await db.update_plant_by_id(session, plant_id, plant_data)
+

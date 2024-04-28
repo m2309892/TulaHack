@@ -26,19 +26,11 @@ class AciditySoilType(str, Enum):
     ALCALINE = 'Щелочные'
 
 
-# class ActionType(str, Enum):
-#     WATER = 'Полив'
-#     SPRAYING = 'Опрыскивание'
-#     FERTILIZING = 'Удобрение'
-#     CUT = 'Обрезка'
-
-
-class PlantActionCreate(BaseModel):
-    name: str
-
-
-class PlantActionGet(PlantActionCreate):
-    id: int
+class ActionType(str, Enum):
+    WATER = 'Полив'
+    SPRAYING = 'Опрыскивание'
+    FERTILIZING = 'Удобрение'
+    CUT = 'Обрезка'
 
 
 class GeneralPlantCreate(BaseModel):
@@ -48,12 +40,10 @@ class GeneralPlantCreate(BaseModel):
     humidity: float
     soil_type: SoilType
     soil_acidity_type: AciditySoilType
-    actions: list[int]
 
 
 class GeneralPlantGet(GeneralPlantCreate):
     id: int
-    actions: list[PlantActionGet] | None = None
 
 
 class PlantCreate(BaseModel):
@@ -71,7 +61,7 @@ class PlantActionNotesCreate(BaseModel):
     date: datetime
     status: bool
     plant: PlantGet
-    action: PlantActionGet
+    action: ActionType
 
 
 class PlantActionNotesGet(PlantActionNotesCreate):

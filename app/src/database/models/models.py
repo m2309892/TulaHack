@@ -22,7 +22,7 @@ class User(Base):
     last_name: Mapped[str] = mapped_column(nullable=True)
     login: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str]
-    created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
     sections: Mapped['Sections'] = relationship(back_populates='user')
 
@@ -57,7 +57,7 @@ class Plants(Base):
     soil_acidity_type: Mapped[AciditySoilType]
 
     section_plant: Mapped['SectionPlant'] = relationship(back_populates='plant')
-    plant_action: Mapped[list['PlantActions']] = relationship(back_populates='plant')
+    # plant_action: Mapped[list['PlantActions']] = relationship(back_populates='plant')
 
 
 class SectionPlant(Base):
@@ -68,48 +68,48 @@ class SectionPlant(Base):
     plant_id: Mapped[int] = mapped_column(ForeignKey('plants.id'))
 
     nickname: Mapped[str]
-    planting_time: Mapped[datetime] = mapped_column(server_default=func.now())
+    planting_time: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     section: Mapped['Sections'] = relationship(back_populates='section_plant')
     plant: Mapped['Plants'] = relationship(back_populates='section_plant')
     plant_action_note: Mapped['PlantActionNotes'] = relationship(back_populates='section_plant')
 
 
-class Actions(Base):
-    __tablename__ = 'actions'
+# class Actions(Base):
+#     __tablename__ = 'actions'
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+#     id: Mapped[int] = mapped_column(primary_key=True, index=True)
 
-    name: Mapped[str]
+#     name: Mapped[str]
 
-    plant_action: Mapped['PlantActions'] = relationship(back_populates='action')
-    plant_action_note: Mapped['PlantActionNotes'] = relationship(back_populates='action')
+#     plant_action: Mapped['PlantActions'] = relationship(back_populates='action')
+#     plant_action_note: Mapped['PlantActionNotes'] = relationship(back_populates='action')
 
 
-class PlantActions(Base):
-    __tablename__ = 'plant_actions'
+# class PlantActions(Base):
+#     __tablename__ = 'plant_actions'
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+#     id: Mapped[int] = mapped_column(primary_key=True, index=True)
 
-    plant_id: Mapped[int] = mapped_column(ForeignKey('plants.id'))
-    action_id: Mapped[int] = mapped_column(ForeignKey('actions.id'))
+#     plant_id: Mapped[int] = mapped_column(ForeignKey('plants.id'))
+#     action_id: Mapped[int] = mapped_column(ForeignKey('actions.id'))
 
-    plant: Mapped['Plants'] = relationship(back_populates='plant_action')
-    action: Mapped['Actions'] = relationship(back_populates='plant_action')
+#     plant: Mapped['Plants'] = relationship(back_populates='plant_action')
+#     action: Mapped['Actions'] = relationship(back_populates='plant_action')
 
 
 class PlantActionNotes(Base):
     __tablename__ = 'plant_action_notes'
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    action_id: Mapped[int] = mapped_column(ForeignKey('actions.id'))
+    action_type: Mapped[str] = mapped_column()
     section_plant_id: Mapped[int] = mapped_column(ForeignKey('section_plants.id'))
 
-    date: Mapped[datetime] = mapped_column(nullable=True)
+    date: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     status: Mapped[bool]
 
     section_plant: Mapped['SectionPlant'] = relationship(back_populates='plant_action_note')
-    action: Mapped['Actions'] = relationship(back_populates='plant_action_note')
+    # action: Mapped['Actions'] = relationship(back_populates='plant_action_note')
 
 
 class WeatherNotes(Base):
@@ -118,7 +118,7 @@ class WeatherNotes(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     section_id: Mapped[int] = mapped_column(ForeignKey('sections.id'))
 
-    date: Mapped[datetime] = mapped_column(server_default=func.now())
+    date: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     temperature: Mapped[float] # Температура
     humidity: Mapped[float] # Влажность
     rainfall: Mapped[float] # Осадки

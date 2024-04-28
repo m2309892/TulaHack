@@ -7,7 +7,7 @@ from src.schemas.plant_schemas import SoilType
 
 class SectionCreate(BaseModel):
     name: str
-    location_type: str
+    location_name: str
     location_x: float
     location_y: float
     soil_type: SoilType
