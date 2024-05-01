@@ -1,10 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { Context } from '../../main.jsx';
-import styles from './index.module.css';
 import Carousel from '../carousel/index.jsx';
 import { getAllSections } from '../../api.js';
 import Item from '../item/index.jsx';
-
+import styles from './index.module.css';
 const Catalog = () => {
     const { userStore } = useContext(Context);
     const [sections, setSections] = useState([]);
@@ -12,7 +11,6 @@ const Catalog = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Получаем все разделы с помощью новой функции из API
                 const sectionsData = await getAllSections();
                 setSections(sectionsData);
             } catch (error) {

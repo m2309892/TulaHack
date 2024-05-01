@@ -13,7 +13,6 @@ axios.interceptors.request.use(config => {
     return Promise.reject(error);
 });
 
-// Функция для отправки POST-запроса на регистрацию пользователя
 export async function registerUser(login, password) {
     try {
         const response = await axios.post('/registration', { login, password });
@@ -23,7 +22,6 @@ export async function registerUser(login, password) {
     }
 }
 
-// Функция для отправки POST-запроса на вход пользователя
 export async function loginUser(username, password) {
     try {
         const response = await axios.post('/login', `grant_type=&username=${username}&password=${password}&scope=&client_id=&client_secret=`, {
@@ -32,7 +30,6 @@ export async function loginUser(username, password) {
                 'accept': 'application/json'
             }
         });
-        //console.log(response.data.access_token)
         localStorage.setItem('token',response.data.access_token);
         return response.data;
     } catch (error) {
@@ -40,7 +37,6 @@ export async function loginUser(username, password) {
     }
 }
 
-// Функция для отправки GET-запроса на получение всех разделов
 export async function getAllSections() {
     try {
         const response = await axios.get('/general/section-all', {
@@ -134,7 +130,6 @@ export const addPlant = async (plantData, token) => {
     }
 };
 
-// Функция для отправки GET-запроса на получение всех растений
 export async function getAllPlants() {
     try {
         const response = await axios.get('/general/plant', {

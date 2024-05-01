@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { Context } from "../../main.jsx";
 import Carousel from "../carousel/index.jsx";
 import Item from "../item/index.jsx";
-import styles from './index.module.css';
 import { getPlantsBySection, getSection } from "../../api.js";
+import styles from './index.module.css';
 
 const MyPlants = observer(() => {
     const { userStore } = useContext(Context);

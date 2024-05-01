@@ -4,7 +4,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import logo from '../../assets/logo.png'
 import styles from './index.module.css';
 
-const Navbar = ({ toggleTheme }) => {
+const Navbar = () => {
     return (
         <nav className={styles.navbar}>
             <Link to="/" className={styles.logo}>

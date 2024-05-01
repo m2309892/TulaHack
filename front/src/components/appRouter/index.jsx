@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from "../navbar/index.jsx";
 import {privateRoutes, publicRoutes} from "../../routes.js";
 
 const AppRouter = () => {
-    const [isDarkTheme, setIsDarkTheme] = useState(false); // Состояние для хранения текущей темы
+    const [isDarkTheme, setIsDarkTheme] = useState(false);
 
     const toggleTheme = () => {
-        setIsDarkTheme(prevTheme => !prevTheme); // Изменяем текущую тему на противоположную
+        setIsDarkTheme(prevTheme => !prevTheme);
     };
 
     return (
-        <div className={isDarkTheme ? 'dark-theme' : 'light-theme'}> {/* Применяем класс в зависимости от текущей темы */}
-            <Navbar toggleTheme={toggleTheme} /> {/* Передаем функцию для переключения темы в навигационный бар */}
+        <div className={isDarkTheme ? 'dark-theme' : 'light-theme'}>
+            <Navbar toggleTheme={toggleTheme} />
             <Routes>
                 {privateRoutes.map(({ path, Component }) => (
                     <Route key={path} path={path} element={<Component />} />

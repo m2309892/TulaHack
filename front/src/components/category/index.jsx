@@ -1,8 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 import Item from "../item/index.jsx";
 import {observer} from "mobx-react-lite";
 import {Context} from "../../main.jsx";
+
 const Category = observer(() => {
     const {userStore} = useContext(Context)
     const { id } = useParams(); // Получаем параметр id из URL
@@ -10,9 +11,8 @@ const Category = observer(() => {
     const [items, setItems] = useState(userStore.getAllPlants());
 
     useEffect(() => {
-        // Здесь можно сделать запрос на сервер для получения информации по id
         const selectedItem = userStore.getAllPlants().find(item => item.id === parseInt(id));
-        //console.log(selectedItem,id)
+
         if (selectedItem) {
             setCategory(selectedItem.category);
         }

@@ -314,12 +314,9 @@ class UserStore {
     addUserPlant(plant) {
         this.userPlants.push(plant);
         const folderIndex = this.folders.findIndex(folder => folder.id === plant.folderId);
-        console.table(folderIndex,this.folders.map(el=>el.id),plant)
         if (folderIndex !== -1) {
-            // Если папка найдена, обновить её список растений
             this.folders[folderIndex].plants.push(plant);
         } else {
-            // Если папка не найдена, создать новую папку и добавить растение в её список растений
             const newFolder = { id: this.folders.length + 1, name: `Папка ${this.folders.length + 1}`, plants: [plant] };
             this.folders.push(newFolder);
         }

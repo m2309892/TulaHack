@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
-import styles from './index.module.css';
 import { Context } from '../../main.jsx';
 import { addPlantToCollection, getPlantById } from '../../api.js';
+import styles from './index.module.css';
 
 const Item = ({ id, folderId, isTall = false }) => {
     const { userStore } = useContext(Context);

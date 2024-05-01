@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import styles from './index.module.css';
 import {aiHelp} from "../../api.js";
+import styles from './index.module.css';
 
 const HelpBot = () => {
     const [inputValue, setInputValue] = useState('');

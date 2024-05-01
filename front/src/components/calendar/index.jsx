@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
-import 'moment/locale/ru'; // Для русской локали
+import 'moment/locale/ru';
 import AddEventModal from './helpers/addModal';
 
-const localizer = momentLocalizer(moment); // Инициализация локализации
+const localizer = momentLocalizer(moment);
 
 const wateringEventsMock = [
     { title: 'Поливка роз', start: new Date(2024,4,15), end: new Date(2024,4,15) },
     { title: 'Поливка папоротников', start: new Date(2024,4,15), end: new Date(2024,4,15) },
     { title: 'Поливка гиацинтов', start: new Date(2024,4,15), end: new Date(2024,4,15) },
     { title: 'Поливка орхидей', start: new Date(2024,4,15), end: new Date(2024,4,15) },
-    // Другие события о поливке...
 ];
 
 const CalendarWidget = () => {
@@ -21,12 +20,9 @@ const CalendarWidget = () => {
     const [selectedDate, setSelectedDate] = useState(null); // Состояние для хранения выбранной даты
 
     useEffect(() => {
-        // Здесь вы можете загрузить события с вашего бэкенда и установить их в состояние events
-        // Например, с помощью fetch или axios
     }, []);
 
     const handleAddEvent = (newEvent) => {
-        // Добавляем новое событие к существующим событиям
         setEvents([...events, newEvent]);
         setShowModal(false);
     };

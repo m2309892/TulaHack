@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Context } from "../../main.jsx";
-import styles from './index.module.css';
 import { useNavigate } from "react-router-dom";
-import { registerUser, loginUser } from "../../api.js"; // Импорт функций для регистрации и входа пользователя
+import { registerUser, loginUser } from "../../api.js";
+import styles from './index.module.css';
 
 const AuthComponent = observer(() => {
     const { userStore } = useContext(Context);
@@ -16,9 +16,7 @@ const AuthComponent = observer(() => {
 
     const handleRegister = async () => {
         try {
-            // Отправляем запрос на регистрацию пользователя
             await registerUser(username, password, firstName, lastName);
-            // Устанавливаем статус авторизации в true
             userStore.setLoggedIn(true);
         } catch (error) {
             console.error('Registration failed:', error);
@@ -27,7 +25,6 @@ const AuthComponent = observer(() => {
 
     const handleLogin = async () => {
         try {
-            // Отправляем запрос на вход пользователя
             await loginUser(username, password);
             userStore.setLoggedIn(true);
             navigate(`/catalog`);
